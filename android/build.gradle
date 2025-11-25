@@ -9,10 +9,15 @@ buildscript {
   }
 
   dependencies {
-    classpath "com.android.tools.build:gradle:8.7.2"
+    classpath "org.jetbrains.kotlin.plugin.compose:org.jetbrains.kotlin.plugin.compose.gradle.plugin:2.2.21"
+
+    classpath "com.android.tools.build:gradle:8.7.3"
     // noinspection DifferentKotlinGradleVersion
     classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:${getExtOrDefault('kotlinVersion')}"
   }
+}
+plugins {
+  id "org.jetbrains.kotlin.plugin.compose" version "2.2.21"
 }
 
 
@@ -37,6 +42,8 @@ android {
 
   buildFeatures {
     buildConfig true
+    // Enable Jetpack Compose
+    compose true
   }
 
   buildTypes {
@@ -50,8 +57,17 @@ android {
   }
 
   compileOptions {
-    sourceCompatibility JavaVersion.VERSION_1_8
-    targetCompatibility JavaVersion.VERSION_1_8
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+  }
+
+  kotlinOptions {
+    jvmTarget = "17"
+  }
+
+  // Compose compiler configuration
+  composeOptions {
+    kotlinCompilerExtensionVersion '1.5.4'
   }
 
   sourceSets {
@@ -74,4 +90,31 @@ def kotlin_version = getExtOrDefault("kotlinVersion")
 dependencies {
   implementation "com.facebook.react:react-android"
   implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+
+  // Jetpack Compose BOM - This manages all Compose library versions
+  implementation platform('androidx.compose:compose-bom:2024.02.00')
+
+  // Compose dependencies (versions are managed by BOM)
+  implementation 'androidx.compose.ui:ui'
+  implementation 'androidx.compose.ui:ui-graphics'
+  implementation 'androidx.compose.ui:ui-tooling-preview'
+  implementation 'androidx.compose.material3:material3'
+  implementation 'androidx.compose.material:material-icons-core'
+  implementation 'androidx.compose.material:material-icons-extended'
+
+  // Activity Compose
+  implementation 'androidx.activity:activity-compose:1.8.2'
+
+  // Optional: Runtime Livedata (if you need to observe LiveData in Compose)
+  implementation 'androidx.compose.runtime:runtime-livedata'
+
+  // Optional: Navigation Compose (if you need navigation)
+  implementation 'androidx.navigation:navigation-compose:2.7.7'
+
+  // Lifecycle utilities for Compose
+  implementation 'androidx.lifecycle:lifecycle-viewmodel-compose:2.7.0'
+
+  // Debug dependencies for Compose (only in debug builds)
+  debugImplementation 'androidx.compose.ui:ui-tooling'
+  debugImplementation 'androidx.compose.ui:ui-test-manifest'
 }
