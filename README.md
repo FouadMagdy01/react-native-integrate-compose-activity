@@ -12,13 +12,20 @@ npm install react-native-integrate-compose-activity
 
 ## Usage
 
-
 ```js
-import { multiply } from 'react-native-integrate-compose-activity';
+import { launchNativeActivity } from 'react-native-integrate-compose-activity';
 
-// ...
-
-const result = multiply(3, 7);
+// Launch a native Jetpack Compose activity
+launchNativeActivity(
+  'Hello from React Native!',
+  (result, error) => {
+    if (error) {
+      console.error('Error:', error);
+      return;
+    }
+    console.log('Result from native:', result);
+  }
+);
 ```
 
 
